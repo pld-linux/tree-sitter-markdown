@@ -1,11 +1,11 @@
 Summary:	Markdown grammar for tree-sitter
 Name:		tree-sitter-markdown
-Version:	0.2.3
+Version:	0.3.2
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b6ea171a2c434992d9ddb965361513c2
+# Source0-md5:	cdd73980b94d2f8a37b2b8af22ca8792
 URL:		https://github.com/tree-sitter-grammars/tree-sitter-markdown
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
