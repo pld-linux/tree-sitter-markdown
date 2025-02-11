@@ -1,7 +1,7 @@
 Summary:	Markdown grammar for tree-sitter
 Name:		tree-sitter-markdown
 Version:	0.3.2
-Release:	1
+Release:	2
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -9,8 +9,8 @@ Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%
 URL:		https://github.com/tree-sitter-grammars/tree-sitter-markdown
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		ts_markdown_soname		libtree-sitter-markdown.so.0
-%define		ts_markdown_inline_soname	libtree-sitter-markdown-inline.so.0
+%define		ts_markdown_soname		libtree-sitter-markdown.so.0.14
+%define		ts_markdown_inline_soname	libtree-sitter-markdown-inline.so.0.14
 
 %description
 A Markdown parser for tree-sitter.
@@ -64,6 +64,9 @@ install -d $RPM_BUILD_ROOT%{_libdir}/nvim/parser
 	LIBDIR="%{_libdir}" \
 	PCLIBDIR="%{_pkgconfigdir}"
 
+%{__ln_s} -f %{_libdir}/%{ts_markdown_soname} $RPM_BUILD_ROOT%{_libdir}/libtree-sitter-markdown.so
+%{__ln_s} -f %{_libdir}/%{ts_markdown_inline_soname} $RPM_BUILD_ROOT%{_libdir}/libtree-sitter-markdown-inline.so
+
 %{__ln_s} %{_libdir}/%{ts_markdown_soname} $RPM_BUILD_ROOT%{_libdir}/nvim/parser/markdown.so
 %{__ln_s} %{_libdir}/%{ts_markdown_inline_soname} $RPM_BUILD_ROOT%{_libdir}/nvim/parser/markdown_inline.so
 
@@ -76,10 +79,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc CONTRIBUTING.md LICENSE README.md
-%attr(755,root,root) %{_libdir}/libtree-sitter-markdown.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/%{ts_markdown_soname}
-%attr(755,root,root) %{_libdir}/libtree-sitter-markdown-inline.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/%{ts_markdown_inline_soname}
+%attr(755,root,root) %{_libdir}/%{ts_markdown_soname}
+%attr(755,root,root) %{_libdir}/%{ts_markdown_inline_soname}
 
 %files devel
 %defattr(644,root,root,755)
