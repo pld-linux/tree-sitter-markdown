@@ -1,16 +1,17 @@
 Summary:	Markdown grammar for tree-sitter
 Name:		tree-sitter-markdown
-Version:	0.3.2
-Release:	2
+Version:	0.4.1
+Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	cdd73980b94d2f8a37b2b8af22ca8792
+# Source0-md5:	d69bc7a1f679ad85e861aafeff28b569
+Patch0:		grammar-path.patch
 URL:		https://github.com/tree-sitter-grammars/tree-sitter-markdown
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		ts_markdown_soname		libtree-sitter-markdown.so.0.14
-%define		ts_markdown_inline_soname	libtree-sitter-markdown-inline.so.0.14
+%define		ts_markdown_soname		libtree-sitter-markdown.so.14.0
+%define		ts_markdown_inline_soname	libtree-sitter-markdown-inline.so.14.0
 
 %description
 A Markdown parser for tree-sitter.
@@ -41,6 +42,7 @@ Markdown parser for Neovim.
 
 %prep
 %setup -q
+%patch -P0 -p1
 
 %build
 %{__make} \
