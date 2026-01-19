@@ -1,0 +1,22 @@
+From da063e1ba4303ff08781eb440cc9a7bd41e55dd8 Mon Sep 17 00:00:00 2001
+From: Heiko Becker <mail@heiko-becker.de>
+Date: Sun, 18 Jan 2026 12:27:57 +0100
+Subject: [PATCH] fix: Correct typo to make "make install" work again (#220)
+
+---
+ common/common.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/common.mak b/common/common.mak
+index 043ab1c..62875e6 100644
+--- a/common/common.mak
++++ b/common/common.mak
+@@ -79,7 +79,7 @@ $(PARSER): $(SRC_DIR)/grammar.json
+ 
+ install: all
+ 	install -d '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/$(LANGUAGE_NAME) '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter '$(DESTDIR)$(PCLIBDIR)' '$(DESTDIR)$(LIBDIR)'
+-	install -m644 bindings/c/tree_sitter/$(LANGUAGE_NAME).h '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter/$(LANGUAGE_NAME).h
++	install -m644 bindings/c/tree-sitter/$(LANGUAGE_NAME).h '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter/$(LANGUAGE_NAME).h
+ 	install -m644 $(LANGUAGE_NAME).pc '$(DESTDIR)$(PCLIBDIR)'/$(LANGUAGE_NAME).pc
+ 	install -m644 lib$(LANGUAGE_NAME).a '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).a
+ 	install -m755 lib$(LANGUAGE_NAME).$(SOEXT) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER)
