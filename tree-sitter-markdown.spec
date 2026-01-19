@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	python3	# Python 3.x binding
+
 Summary:	Markdown grammar for tree-sitter
 Summary(pl.UTF-8):	Gramatyka formatu Markdown dla tree-sittera
 Name:		tree-sitter-markdown
@@ -9,9 +13,15 @@ Group:		Libraries
 Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	cbc71aea4dab8d70ad59957d54c08446
 Patch0:		%{name}-typo.patch
+Patch1:		%{name}-python.patch
 URL:		https://github.com/tree-sitter-grammars/tree-sitter-markdown
 # c11
 BuildRequires:	gcc >= 6:4.7
+%if %{with python3}
+BuildRequires:	python3-devel >= 1:3.10
+BuildRequires:	python3-setuptools
+BuildRequires:	python3-wheel
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		soname_ver	15.0
@@ -58,9 +68,22 @@ Markdown parser for Neovim.
 %description -n neovim-parser-markdown -l pl.UTF-8
 Analizator składni formatu Markdown Lua dla Neovima.
 
+%package -n python3-tree-sitter-markdown
+Summary:	Lua parser for Python
+Summary(pl.UTF-8):	Analizator składni formatu Markdown dla Pythona
+Group:		Libraries/Python
+Requires:	python3-tree-sitter >= 0.24
+
+%description -n python3-tree-sitter-markdown
+Lua parser for Python.
+
+%description -n python3-tree-sitter-markdown -l pl.UTF-8
+Analizator składni formatu Markdown dla Pythona.
+
 %prep
 %setup -q
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 %{__make} \
@@ -71,6 +94,10 @@ Analizator składni formatu Markdown Lua dla Neovima.
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcppflags} %{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}"
+
+%if %{with python3}
+%py3_build
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -91,6 +118,13 @@ install -d $RPM_BUILD_ROOT%{_libdir}/nvim/parser
 
 # redundant symlinks
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/libtree-sitter-markdown*.so.15
+
+%if %{with python3}
+%py3_install
+
+%{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/tree_sitter_markdown/*.c
+
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -127,3 +161,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/nvim/parser/markdown.so
 %{_libdir}/nvim/parser/markdown_inline.so
+
+%if %{with python3}
+%files -n python3-tree-sitter-markdown
+%defattr(644,root,root,755)
+%dir %{py3_sitedir}/tree_sitter_markdown
+%{py3_sitedir}/tree_sitter_markdown/_binding.abi3.so
+%{py3_sitedir}/tree_sitter_markdown/__init__.py
+%{py3_sitedir}/tree_sitter_markdown/__init__.pyi
+%{py3_sitedir}/tree_sitter_markdown/py.typed
+%{py3_sitedir}/tree_sitter_markdown/__pycache__
+%{py3_sitedir}/tree_sitter_markdown-%{version}-py*.egg-info
+%endif

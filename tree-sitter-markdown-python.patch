@@ -1,0 +1,29 @@
+--- tree-sitter-markdown-0.5.2/setup.py.orig	2026-01-11 11:44:35.000000000 +0100
++++ tree-sitter-markdown-0.5.2/setup.py	2026-01-19 21:03:22.691398454 +0100
+@@ -22,8 +22,8 @@ class BuildExt(build_ext):
+             ext.extra_compile_args = ["-std=c11", "-fvisibility=hidden"]
+         else:
+             ext.extra_compile_args = ["/std:c11", "/utf-8"]
+-        if path.exists("src/scanner.c"):
+-            ext.sources.append("src/scanner.c")
++        if path.exists("tree-sitter-markdown/src/scanner.c"):
++            ext.sources.append("tree-sitter-markdown/src/scanner.c")
+         if ext.py_limited_api:
+             ext.define_macros.append(("Py_LIMITED_API", "0x030A0000"))
+         super().build_extension(ext)
+@@ -57,13 +57,13 @@ setup(
+             name="_binding",
+             sources=[
+                 "bindings/python/tree_sitter_markdown/binding.c",
+-                "src/parser.c",
++                "tree-sitter-markdown/src/parser.c",
+             ],
+             define_macros=[
+                 ("PY_SSIZE_T_CLEAN", None),
+                 ("TREE_SITTER_HIDE_SYMBOLS", None),
+             ],
+-            include_dirs=["src"],
++            include_dirs=["tree-sitter-markdown/src"],
+             py_limited_api=not get_config_var("Py_GIL_DISABLED"),
+         )
+     ],
