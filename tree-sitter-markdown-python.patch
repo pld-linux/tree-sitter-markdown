@@ -1,6 +1,6 @@
 --- tree-sitter-markdown-0.5.2/setup.py.orig	2026-01-11 11:44:35.000000000 +0100
-+++ tree-sitter-markdown-0.5.2/setup.py	2026-01-19 21:03:22.691398454 +0100
-@@ -22,8 +22,8 @@ class BuildExt(build_ext):
++++ tree-sitter-markdown-0.5.2/setup.py	2026-01-25 22:33:31.630348519 +0100
+@@ -22,8 +22,10 @@ class BuildExt(build_ext):
              ext.extra_compile_args = ["-std=c11", "-fvisibility=hidden"]
          else:
              ext.extra_compile_args = ["/std:c11", "/utf-8"]
@@ -8,22 +8,58 @@
 -            ext.sources.append("src/scanner.c")
 +        if path.exists("tree-sitter-markdown/src/scanner.c"):
 +            ext.sources.append("tree-sitter-markdown/src/scanner.c")
++        if path.exists("tree-sitter-markdown-inline/src/scanner.c"):
++            ext.sources.append("tree-sitter-markdown-inline/src/scanner.c")
          if ext.py_limited_api:
              ext.define_macros.append(("Py_LIMITED_API", "0x030A0000"))
          super().build_extension(ext)
-@@ -57,13 +57,13 @@ setup(
+@@ -57,13 +59,14 @@ setup(
              name="_binding",
              sources=[
                  "bindings/python/tree_sitter_markdown/binding.c",
 -                "src/parser.c",
 +                "tree-sitter-markdown/src/parser.c",
++                "tree-sitter-markdown-inline/src/parser.c",
              ],
              define_macros=[
                  ("PY_SSIZE_T_CLEAN", None),
                  ("TREE_SITTER_HIDE_SYMBOLS", None),
              ],
 -            include_dirs=["src"],
-+            include_dirs=["tree-sitter-markdown/src"],
++            include_dirs=["tree-sitter-markdown/src", "tree-sitter-markdown-inline/src"],
              py_limited_api=not get_config_var("Py_GIL_DISABLED"),
          )
      ],
+--- tree-sitter-markdown-0.5.2/bindings/python/tests/test_binding.py.orig	2026-01-11 11:44:35.000000000 +0100
++++ tree-sitter-markdown-0.5.2/bindings/python/tests/test_binding.py	2026-01-25 22:37:01.979208961 +0100
+@@ -1,6 +1,7 @@
+ from unittest import TestCase
+ 
+-import tree_sitter, tree_sitter_markdown
++from tree_sitter import Language, Parser
++import tree_sitter_markdown
+ 
+ 
+ class TestLanguage(TestCase):
+@@ -10,8 +11,8 @@ class TestLanguage(TestCase):
+         except Exception:
+             self.fail("Error loading Markdown block grammar")
+ 
+-    def test_can_load_block_grammar(self):
++    def test_can_load_inline_grammar(self):
+         try:
+-            Parser(Language(tree_sitter_markdown.inline_language())
++            Parser(Language(tree_sitter_markdown.inline_language()))
+         except Exception:
+             self.fail("Error loading Markdown inline grammar")
+--- tree-sitter-markdown-0.5.2/bindings/python/tree_sitter_markdown/__init__.py.orig	2026-01-11 11:44:35.000000000 +0100
++++ tree-sitter-markdown-0.5.2/bindings/python/tree_sitter_markdown/__init__.py	2026-01-26 07:25:19.080824356 +0100
+@@ -2,7 +2,7 @@
+ 
+ from importlib.resources import files as _files
+ 
+-from ._binding import language
++from ._binding import language, inline_language
+ 
+ 
+ def _get_query(name, file):

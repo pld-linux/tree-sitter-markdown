@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	python3	# Python 3.x binding
+%bcond_without	tests	# Python binding load test
 
 Summary:	Markdown grammar for tree-sitter
 Summary(pl.UTF-8):	Gramatyka formatu Markdown dla tree-sittera
@@ -98,6 +99,11 @@ Analizator składni formatu Markdown dla Pythona.
 
 %if %{with python3}
 %py3_build
+
+%if %{with tests}
+PYTHONPATH=$(readlink -f build-3/lib.*) \
+%{__python3} -m unittest discover -s bindings/python/tests
+%endif
 %endif
 
 %install
