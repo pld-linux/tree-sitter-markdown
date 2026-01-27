@@ -22,6 +22,9 @@ BuildRequires:	gcc >= 6:4.7
 BuildRequires:	python3-devel >= 1:3.10
 BuildRequires:	python3-setuptools >= 1:42
 BuildRequires:	python3-wheel
+%if %{with tests}
+BuildRequires:	python3-tree-sitter >= 0.24
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.714
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
