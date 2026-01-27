@@ -25,6 +25,7 @@ BuildRequires:	python3-wheel
 %if %{with tests}
 BuildRequires:	python3-tree-sitter >= 0.24
 %endif
+BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
