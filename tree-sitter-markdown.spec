@@ -3,6 +3,9 @@
 %bcond_without	python3	# Python 3.x binding
 %bcond_without	tests	# Python binding load test
 
+%define		api_ver_markdown		15
+%define		api_ver_markdown_inline		%{api_ver_markdown}
+
 Summary:	Markdown grammar for tree-sitter
 Summary(pl.UTF-8):	Gramatyka formatu Markdown dla tree-sittera
 Name:		tree-sitter-markdown
@@ -67,6 +70,10 @@ Summary:	Markdown parser for Neovim
 Summary(pl.UTF-8):	Analizator składni formatu Markdown dla Neovima
 Group:		Applications/Editors
 Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	c-tree-sitter(abi)%{?_isa} = %{api_ver_markdown}
+%if %{api_ver_markdown} != %{api_ver_markdown_inline}
+Requires:	c-tree-sitter(abi)%{?_isa} = %{api_ver_markdown_inline}
+%endif
 
 %description -n neovim-parser-markdown
 Markdown parser for Neovim.
@@ -120,6 +127,10 @@ install -d $RPM_BUILD_ROOT%{_libdir}/nvim/parser
 	INCLUDEDIR="%{_includedir}" \
 	LIBDIR="%{_libdir}" \
 	PCLIBDIR="%{_pkgconfigdir}"
+
+# validate after all make invocations as make rule might have regenerated parser
+grep -q 'LANGUAGE_VERSION[[:space:]]*%{api_ver_markdown}$' tree-sitter-markdown/src/parser.c
+grep -q 'LANGUAGE_VERSION[[:space:]]*%{api_ver_markdown_inline}$' tree-sitter-markdown-inline/src/parser.c
 
 %{__ln_s} -f libtree-sitter-markdown.so.%{soname_ver} $RPM_BUILD_ROOT%{_libdir}/libtree-sitter-markdown.so
 %{__ln_s} -f libtree-sitter-markdown-inline.so.%{soname_ver} $RPM_BUILD_ROOT%{_libdir}/libtree-sitter-markdown-inline.so
