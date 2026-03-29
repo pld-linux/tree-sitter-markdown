@@ -9,15 +9,14 @@
 Summary:	Markdown grammar for tree-sitter
 Summary(pl.UTF-8):	Gramatyka formatu Markdown dla tree-sittera
 Name:		tree-sitter-markdown
-Version:	0.5.2
+Version:	0.5.3
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://github.com/tree-sitter-grammars/tree-sitter-markdown/releases
 Source0:	https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	cbc71aea4dab8d70ad59957d54c08446
-Patch0:		%{name}-typo.patch
-Patch1:		%{name}-python.patch
+# Source0-md5:	ef4da5026c35aad69b137de0c3279499
+Patch0:		%{name}-python.patch
 URL:		https://github.com/tree-sitter-grammars/tree-sitter-markdown
 # c11
 BuildRequires:	gcc >= 6:4.7
@@ -96,7 +95,6 @@ Analizator składni formatu Markdown dla Pythona.
 %prep
 %setup -q
 %patch -P0 -p1
-%patch -P1 -p1
 
 %build
 %{__make} \
